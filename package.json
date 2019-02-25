@@ -1,5 +1,5 @@
 {
-  "name": "q-learning",
+  "name": "ml-q-learning",
   "version": "0.0.1",
   "description": "Library implementing the q-learning algorithm and several exploration algorithms.",
   "main": "./lib/q-learning-agent.js",
