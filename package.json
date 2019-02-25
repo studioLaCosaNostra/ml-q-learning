@@ -1,0 +1,24 @@
+{
+  "name": "q-learning",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./lib/q-learning-agent.js",
+  "types": "./lib/q-learning-agent.d.ts",
+  "scripts": {
+    "start": "tsc -w",
+    "prepare": "npm run build",
+    "build": "rimraf lib && tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rimraf": "^2.6.3",
+    "typescript": "^3.3.3333"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs-core": "^0.15.4",
+    "dexie": "^2.0.4"
+  }
+}
