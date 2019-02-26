@@ -1,5 +1,7 @@
 # ml-q-learning
 
+Library implementing the q-learning algorithm and several exploration algorithms.
+
 ## Install
 
 `npm install ml-q-learning`
@@ -14,9 +16,9 @@
 P - Player
 # - Wall
 . - Nothing
-X - Trap
-R - Treasure
-F - Finish
+X - Trap = -200
+R - Treasure = 200
+F - Finish = 1000
 ```
 
 ```bash
