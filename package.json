@@ -6,6 +6,7 @@
   "types": "./lib/q-learning-agent.d.ts",
   "scripts": {
     "start": "tsc -w",
+    "ts-node": "ts-node",
     "prepare": "npm run build",
     "build": "rimraf lib && tsc",
     "test": "jest",
@@ -31,6 +32,7 @@
     "jest": "^24.1.0",
     "rimraf": "^2.6.3",
     "ts-jest": "^24.0.0",
+    "ts-node": "^8.0.2",
     "typescript": "^3.3.3333"
   },
   "dependencies": {

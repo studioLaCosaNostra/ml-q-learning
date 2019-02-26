@@ -4,6 +4,10 @@ import { IMemoryAdapter } from "./memory.interface";
 export class MapInMemory implements IMemoryAdapter {
     public map = new Map<string, number[]>();
     public trainingInfo: ITrainingInfo | undefined;
+
+    async size(): Promise<number> {
+      return this.map.size;
+    }
   
     async setState(stateSerialized: string, actionsStats: number[]): Promise<void> {
       this.map.set(stateSerialized, actionsStats);

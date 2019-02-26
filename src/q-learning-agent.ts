@@ -1,5 +1,6 @@
 import { greedyPickAction } from './pick-action-strategy';
 import { MapInMemory, IMemoryAdapter } from './memory';
+import { IQLearningAgent } from './q-learning-agent.interface';
 
 export interface ITrainingInfo {
   episode: number;
@@ -23,7 +24,7 @@ export interface IStep<T> {
   trainingInfo: ITrainingInfo;
 }
 
-export class QLearningAgent<TAction = any> {
+export class QLearningAgent<TAction = any> implements IQLearningAgent {
   private startEpisode: number = 0;
   public replayMemory: [string, number, number][] = [];
   public episode: number = 0;
@@ -39,7 +40,7 @@ export class QLearningAgent<TAction = any> {
     this.init();
   }
 
-  async init() {
+  private async init() {
     if (!this.episode) {
       this.startEpisode = await this.memory.hasInfo() ? (await this.memory.getInfo()).episode : 1;
       this.episode = this.startEpisode;
@@ -47,7 +48,7 @@ export class QLearningAgent<TAction = any> {
     }
   }
 
-  async play(state: IState): Promise<IStep<TAction>> {
+  public async play(state: IState): Promise<IStep<TAction>> {
     await this.init();
     const stateSerialized: string = state.toString();
     this.episode += 1;
@@ -65,7 +66,7 @@ export class QLearningAgent<TAction = any> {
     };
   }
 
-  reward(step: IStep<TAction>, reward: number): void {
+  public reward(step: IStep<TAction>, reward: number): void {
     this.replayMemory[step.historyIndex][2] += reward;
   }
 

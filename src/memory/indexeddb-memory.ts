@@ -27,6 +27,10 @@ export class IndexedDBMemory implements IMemoryAdapter {
     this.db = new MemoryDatabase(dbName);
   }
 
+  async size(): Promise<number> {
+    return this.db.states.count();
+  }
+
   async setState(stateSerialized: string, stateStats: number[]): Promise<void> {
     await this.db.states.put({
       stateSerialized,

@@ -1,6 +1,8 @@
 import { ITrainingInfo, IAIDocument } from "../q-learning-agent";
 
 export interface IMemoryAdapter {
+  size(): Promise<number>;
+  
   setState(stateSerialized: string, actionsStats: number[]): Promise<void>;
   setStateBulk(states: [string, number[]][]): Promise<void>;
   hasState(stateSerialized: string): Promise<boolean>;
