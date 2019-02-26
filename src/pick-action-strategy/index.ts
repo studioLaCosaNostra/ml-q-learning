@@ -1,6 +1,6 @@
 import { tidy, tensor1d } from "@tensorflow/tfjs-core";
 
-function argMax(array: number[]): number {
+export function argMax(array: number[]): number {
   const argMaxResult = tidy(() => {
     const x = tensor1d(array);
     return x.argMax();
