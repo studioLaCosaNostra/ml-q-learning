@@ -1,10 +1,46 @@
 # ml-q-learning
 
-Library implementing the q-learning algorithm and several exploration algorithms.
+  Library implementing the q-learning algorithm and several exploration algorithms.
 
 ## Install
 
 `npm install ml-q-learning`
+
+## QLearningAgent
+
+```typescript
+export class QLearningAgent<TAction = any> implements IQLearningAgent {
+  public replayMemory: [string, number, number][] = [];
+  public episode: number = 0;
+  public trained = false;
+
+  constructor(
+    public actions: TAction[],
+    private pickActionStrategy: (actionsStats: number[], episode: number) => Promise<number> = greedyPickAction,
+    public memory: IMemoryAdapter = new MapInMemory(),
+    public learningRate = 0.1,
+    public discountFactor = 0.99,
+  ) {}
+
+  public async play(state: IState): Promise<IStep<TAction>> {};
+
+  public reward(step: IStep<TAction>, reward: number): void {};
+
+  public async learn(): Promise<void> {};
+}
+```
+
+## Memory
+
+- [`MapInMemory`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/memory/map-in-memory.ts)
+- [`IndexedDBMemory`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/memory/indexeddb-memory.ts)
+
+## Pick action strategy
+
+- [`randomPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L13)
+- [`greedyPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L17)
+- [`epsilonGreedyPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L22)
+- [`decayingEpsilonGreedyPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L32)
 
 ## Example use
 
@@ -50,28 +86,3 @@ Start maze
   [ '.', '.', 'X', '.', '.', '.', '.', '#', '.' ],
   [ '.', '.', '.', '.', '#', '.', '.', '#', 'R' ] ]
 ```
-
-## QLearningAgent
-
-```typescript
-export class QLearningAgent<TAction = any> implements IQLearningAgent {
-  public replayMemory: [string, number, number][] = [];
-  public episode: number = 0;
-  public trained = false;
-
-  constructor(
-    public actions: TAction[],
-    private pickActionStrategy: (actionsStats: number[], episode: number) => Promise<number> = greedyPickAction,
-    public memory: IMemoryAdapter = new MapInMemory(),
-    public learningRate = 0.1,
-    public discountFactor = 0.99,
-  ) {}
-
-  public async play(state: IState): Promise<IStep<TAction>> {};
-
-  public reward(step: IStep<TAction>, reward: number): void {};
-
-  public async learn(): Promise<void> {};
-}
-```
-
