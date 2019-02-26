@@ -3,7 +3,7 @@ import '@tensorflow/tfjs-node';
 
 describe('Q-Learning', () => {
   test('create Q-Learning agent', () => {
-    const agent = new QLearningAgent(['1', 2]);
+    new QLearningAgent(['1', 2]);
   });
 
   test('simple action test', async () => {
