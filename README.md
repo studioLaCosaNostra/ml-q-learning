@@ -32,8 +32,8 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
 
 ## Memory
 
-- [`MapInMemory`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/memory/map-in-memory.ts)
-- [`IndexedDBMemory`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/memory/indexeddb-memory.ts)
+- [`MapInMemory`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/memory/map-in-memory.ts#L4)
+- [`IndexedDBMemory`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/memory/indexeddb-memory.ts#L23)
 
 ## Pick action strategy
 
