@@ -4,7 +4,7 @@
 
 `Maze escape`
 
-`src/lib/example/maze-escape.ts`
+[src/example/maze-escape.ts](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/example/maze-escape.ts)
 
 ```
 P - Player
