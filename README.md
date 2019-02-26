@@ -1,5 +1,9 @@
 # ml-q-learning
 
+## Install
+
+`npm install ml-q-learning`
+
 ## Example use
 
 `Maze escape`
@@ -10,7 +14,7 @@
 P - Player
 # - Wall
 . - Nothing
-x - Trap
+X - Trap
 R - Treasure
 F - Finish
 ```
