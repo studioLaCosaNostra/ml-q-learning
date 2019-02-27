@@ -1,13 +1,13 @@
 {
   "name": "ml-q-learning",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Library implementing the q-learning algorithm and several exploration algorithms.",
   "main": "./lib/q-learning-agent.js",
   "types": "./lib/q-learning-agent.d.ts",
   "scripts": {
     "start": "tsc -w",
     "ts-node": "ts-node",
-    "prepare": "npm run build",
+    "prepublish": "npm test && npm run build",
     "build": "rimraf lib && tsc",
     "test": "jest",
     "test:watch": "jest --watch"
@@ -24,6 +24,7 @@
     "exploitation"
   ],
   "author": "Studio La Cosa Nostra <studiolacosanostra@gmail.com>",
+  "homepage": "https://github.com/studioLaCosaNostra/ml-q-learning#readme",
   "license": "ISC",
   "devDependencies": {
     "@tensorflow/tfjs-node": "^0.3.0",
