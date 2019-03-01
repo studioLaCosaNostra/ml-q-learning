@@ -41,6 +41,9 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
 - [`greedyPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L17)
 - [`epsilonGreedyPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L22)
 - [`decayingEpsilonGreedyPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L32)
+- [`softmaxPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L39)
+- [`epsilonSoftmaxGreedyPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L51)
+- [`decayingEpsilonSoftmaxGreedyPickAction`](https://github.com/studioLaCosaNostra/ml-q-learning/blob/master/src/pick-action-strategy/index.ts#L61)
 
 ## Example use
 

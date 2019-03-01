@@ -32,7 +32,7 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
 
   constructor(
     public actions: TAction[],
-    private pickActionStrategy: (actionsStats: number[], episode: number) => Promise<number> = greedyPickAction,
+    private pickActionStrategy: (actionsStats: number[], episode: number) => Promise<number> | number = greedyPickAction,
     public memory: IMemoryAdapter = new MapInMemory(),
     public learningRate = 0.1,
     public discountFactor = 0.99,

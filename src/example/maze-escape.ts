@@ -1,5 +1,5 @@
 import { QLearningAgent } from "../q-learning-agent";
-import { decayingEpsilonGreedyPickAction } from "../pick-action-strategy";
+import { decayingEpsilonSoftmaxGreedyPickAction } from "../pick-action-strategy";
 
 enum Action {
   Left,
@@ -122,7 +122,7 @@ class MazeGame {
 
 
 async function main() {
-  const agent = new QLearningAgent([Action.Left, Action.Right, Action.Up, Action.Down], decayingEpsilonGreedyPickAction(0.05, 0.99, 30000));
+  const agent = new QLearningAgent([Action.Left, Action.Right, Action.Up, Action.Down], decayingEpsilonSoftmaxGreedyPickAction(0.05, 0.99, 3000));
   let betsScore = -Infinity;
 
   console.log('Start maze');
@@ -131,6 +131,8 @@ async function main() {
     let score = 0;
     const game = new MazeGame(maze);
     let endGame = false;
+    const maxSteps = 10000;
+    let stepCount = 0;
     while (!endGame) {
       const step = await agent.play(game.maze.toString());
       const [maze, reward, finish] = game.performAction(step.action);
@@ -148,6 +150,10 @@ async function main() {
 -------------------------------
         `)
         console.log(maze);
+      }
+      stepCount += 1;
+      if (stepCount > maxSteps) {
+        break;
       }
       endGame = finish;
     }

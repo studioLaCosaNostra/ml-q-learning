@@ -1,5 +1,5 @@
 import '@tensorflow/tfjs-node';
-import { argMax, randomPickAction, greedyPickAction, epsilonGreedyPickAction } from ".";
+import { argMax, randomPickAction, greedyPickAction, epsilonGreedyPickAction, softmaxPickAction } from ".";
 
 describe('Pick action strategy', () => {
   test('argMax', () => {
@@ -36,5 +36,12 @@ describe('Pick action strategy', () => {
     const index2 = await epsilonGreedyPickAction(0.99)([0, 1, 0, 0, 2]);
     expect(index2).toBe(2);
     Math.random = nativeRandom.bind(Math);
+  })
+
+  test('softmaxPickAction', async () => {
+    const actionStats = [1, 2, 3];
+    const result = softmaxPickAction(actionStats);
+    expect(result).toBeGreaterThanOrEqual(0);
+    expect(result).toBeLessThan(actionStats.length);
   })
 });
