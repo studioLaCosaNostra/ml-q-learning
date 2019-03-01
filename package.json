@@ -1,6 +1,6 @@
 {
   "name": "ml-q-learning",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Library implementing the q-learning algorithm and several exploration algorithms.",
   "main": "./lib/q-learning-agent.js",
   "types": "./lib/q-learning-agent.d.ts",
