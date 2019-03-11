@@ -101,6 +101,7 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
     }
     await this.memory.setStateBulk(Array.from(map));
     await this.newTrainingInfo(this.episode - this.startEpisode);
+    this.startEpisode += this.episode;
     this.replayMemory = [];
   }
 
