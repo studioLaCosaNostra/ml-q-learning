@@ -1,11 +1,12 @@
 {
   "name": "ml-q-learning",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "Library implementing the q-learning algorithm and several exploration algorithms.",
   "main": "./lib/q-learning-agent.js",
   "types": "./lib/q-learning-agent.d.ts",
   "scripts": {
     "start": "tsc -w",
+    "maze-escape": "ts-node src/example/maze-escape.ts",
     "ts-node": "ts-node",
     "prepublish": "npm test && npm run build",
     "build": "rimraf lib && tsc",
