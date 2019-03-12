@@ -1,6 +1,6 @@
 {
   "name": "ml-q-learning",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Library implementing the q-learning algorithm and several exploration algorithms.",
   "main": "./lib/q-learning-agent.js",
   "types": "./lib/q-learning-agent.d.ts",
@@ -26,6 +26,7 @@
   ],
   "author": "Studio La Cosa Nostra <studiolacosanostra@gmail.com>",
   "homepage": "https://github.com/studioLaCosaNostra/ml-q-learning#readme",
+  "repository": "https://github.com/studioLaCosaNostra/ml-q-learning",
   "license": "ISC",
   "devDependencies": {
     "@tensorflow/tfjs-node": "^0.3.0",
