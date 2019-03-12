@@ -24,6 +24,8 @@ export interface IStep<T> {
   trainingInfo: ITrainingInfo;
 }
 
+export { IQLearningAgent };
+
 export class QLearningAgent<TAction = any> implements IQLearningAgent {
   private startEpisode: number = 0;
   public replayMemory: [string, number, number][] = [];
@@ -32,7 +34,7 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
 
   constructor(
     public actions: TAction[],
-    private pickActionStrategy: (actionsStats: number[], episode: number) => Promise<number> | number = greedyPickAction,
+    protected pickActionStrategy: (actionsStats: number[], episode: number) => Promise<number> | number = greedyPickAction,
     public memory: IMemoryAdapter = new MapInMemory(),
     public learningRate = 0.1,
     public discountFactor = 0.99,
@@ -52,9 +54,7 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
     await this.init();
     const stateSerialized: string = state.toString();
     this.episode += 1;
-    await this.createStateIfNotExist(stateSerialized);
-    const actionsStats: number[] = await this.memory.getState(stateSerialized);
-    const actionIndex = await this.pickActionStrategy(actionsStats, this.episode);
+    const actionIndex = await this.chooseActionAlgorithm(stateSerialized);
     const index: number = this.replayMemory.push([stateSerialized, actionIndex, 0]) - 1;
     return {
       action: this.actions[actionIndex],
@@ -66,17 +66,24 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
     };
   }
 
+  protected async chooseActionAlgorithm(stateSerialized: string): Promise<number> {
+    await this.createStateIfNotExist(stateSerialized);
+    const actionsStats: number[] = await this.memory.getState(stateSerialized);
+    const actionIndex = await this.pickActionStrategy(actionsStats, this.episode);
+    return actionIndex;
+  }
+
   public reward(step: IStep<TAction>, reward: number): void {
     this.replayMemory[step.historyIndex][2] += reward;
   }
 
-  private async createStateIfNotExist(stateSerialized: string): Promise<void> {
+  protected async createStateIfNotExist(stateSerialized: string): Promise<void> {
     if (!(await this.memory.hasState(stateSerialized))) {
       await this.memory.setState(stateSerialized, Array(this.actions.length).fill(0));
     }
   }
 
-  private async greedyPickAction(stateSerialized: string): Promise<number> {
+  protected async greedyPickAction(stateSerialized: string): Promise<number> {
     const actionsStats: number[] = await this.memory.getState(stateSerialized);
     return greedyPickAction(actionsStats); // exploit
   }
@@ -90,33 +97,41 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
     for (let index = 1; index < this.replayMemory.length - 1; index++) {
       const action: number = this.replayMemory[index][1];
       const reward: number = this.replayMemory[index][2];
-      const stateSerialized2: string = this.replayMemory[index + 1][0];
-      const action2 = await this.greedyPickAction(stateSerialized2);
-      const actionsStats: number[] = map.get(stateSerialized) || await this.memory.getState(stateSerialized);
-      const actionsStats2: number[] = map.get(stateSerialized2) || await this.memory.getState(stateSerialized2);
-      // tslint:disable-next-line:max-line-length
-      actionsStats[action] = actionsStats[action] + this.learningRate * (reward + (this.discountFactor * actionsStats2[action2]) - actionsStats[action]);
-      map.set(stateSerialized, actionsStats);
-      stateSerialized = stateSerialized2;
+      const stateSerializedPrime: string = this.replayMemory[index + 1][0];
+      const [stateSerializedToUpdate, actionsStats] = await this.learningAlgorithm(action, reward, stateSerialized, stateSerializedPrime)
+      map.set(stateSerializedToUpdate, actionsStats);
+      stateSerialized = stateSerializedPrime;
     }
     await this.memory.setStateBulk(Array.from(map));
-    await this.newTrainingInfo(this.episode - this.startEpisode);
+    await this.updateTrainingInfo();
     this.replayMemory = [];
   }
 
-  private async newTrainingInfo(episode: number): Promise<ITrainingInfo> {
+  protected async learningAlgorithm(action: number, reward: number, stateSerialized: string, stateSerializedPrime: string): Promise<[string, number[]]> {
+    const actionPrime = await this.greedyPickAction(stateSerializedPrime);
+    const actionsStats: number[] = await this.memory.getState(stateSerialized);
+    const actionsStatsPrime: number[] = await this.memory.getState(stateSerializedPrime);
+    // tslint:disable-next-line:max-line-length
+    actionsStats[action] = actionsStats[action] + this.learningRate * (reward + (this.discountFactor * actionsStatsPrime[actionPrime]) - actionsStats[action]);
+    return [stateSerialized, actionsStats];
+  }
+
+  private async updateTrainingInfo(): Promise<ITrainingInfo> {
     if (!(await this.memory.hasInfo())) {
       await this.memory.setInfo({
-        episode,
+        episode: this.episode,
         trained: false
       });
     }
     const info = await this.memory.getInfo();
+    const newEpisode = info.episode + this.episode - this.startEpisode;
     const newInfo = {
-      episode: info.episode + episode,
+      episode: newEpisode,
       trained: info.trained
     };
     await this.memory.setInfo(newInfo);
+    this.startEpisode = newEpisode;
+    this.episode = newEpisode;
     return newInfo;
   }
 }
