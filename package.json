@@ -1,6 +1,6 @@
 {
   "name": "ml-q-learning",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Library implementing the q-learning algorithm and several exploration algorithms.",
   "main": "./lib/q-learning-agent.js",
   "types": "./lib/q-learning-agent.d.ts",
@@ -40,7 +40,7 @@
     "typescript": "^3.3.3333"
   },
   "dependencies": {
-    "@tensorflow/tfjs-core": "^1.0.1",
+    "@tensorflow/tfjs-core": "^0.15.4",
     "dexie": "^2.0.4"
   },
   "husky": {
