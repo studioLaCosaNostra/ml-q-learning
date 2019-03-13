@@ -92,13 +92,20 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
     if (this.replayMemory.length === 0) {
       return;
     }
-    const map = new Map();
+    const map = new Map<string, number[]>();
+    const getState = async (stateSerialized: string): Promise<number[]> => {
+      const value = map.get(stateSerialized);
+      if (!value) {
+        return this.memory.getState(stateSerialized);
+      }
+      return value;
+    };
     let stateSerialized: string = this.replayMemory[0][0];
     for (let index = 1; index < this.replayMemory.length - 1; index++) {
       const action: number = this.replayMemory[index][1];
       const reward: number = this.replayMemory[index][2];
       const stateSerializedPrime: string = this.replayMemory[index + 1][0];
-      const [stateSerializedToUpdate, actionsStats] = await this.learningAlgorithm(action, reward, stateSerialized, stateSerializedPrime)
+      const [stateSerializedToUpdate, actionsStats] = await this.learningAlgorithm(action, reward, stateSerialized, stateSerializedPrime, getState)
       map.set(stateSerializedToUpdate, actionsStats);
       stateSerialized = stateSerializedPrime;
     }
@@ -107,10 +114,10 @@ export class QLearningAgent<TAction = any> implements IQLearningAgent {
     this.replayMemory = [];
   }
 
-  protected async learningAlgorithm(action: number, reward: number, stateSerialized: string, stateSerializedPrime: string): Promise<[string, number[]]> {
+  protected async learningAlgorithm(action: number, reward: number, stateSerialized: string, stateSerializedPrime: string, getState: (stateSerialized: string) => Promise<number[]>): Promise<[string, number[]]> {
     const actionPrime = await this.greedyPickAction(stateSerializedPrime);
-    const actionsStats: number[] = await this.memory.getState(stateSerialized);
-    const actionsStatsPrime: number[] = await this.memory.getState(stateSerializedPrime);
+    const actionsStats: number[] = await getState(stateSerialized);
+    const actionsStatsPrime: number[] = await getState(stateSerializedPrime);
     // tslint:disable-next-line:max-line-length
     actionsStats[action] = actionsStats[action] + this.learningRate * (reward + (this.discountFactor * actionsStatsPrime[actionPrime]) - actionsStats[action]);
     return [stateSerialized, actionsStats];
